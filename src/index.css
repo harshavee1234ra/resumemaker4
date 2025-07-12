@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* High-contrast dark mode base styles */
+@layer base {
+  /* Ensure proper contrast ratios in dark mode */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  /* Custom high-contrast text utilities */
+  .text-contrast-high {
+    @apply text-white dark:text-white;
+  }
+  
+  .text-contrast-medium {
+    @apply text-gray-700 dark:text-gray-200;
+  }
+  
+  .text-contrast-low {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+  
+  /* Background utilities for optimal contrast */
+  .bg-contrast-surface {
+    @apply bg-white dark:bg-dark-bg-secondary;
+  }
+  
+  .bg-contrast-elevated {
+    @apply bg-gray-50 dark:bg-dark-bg-tertiary;
+  }
+  
+  /* Border utilities */
+  .border-contrast {
+    @apply border-gray-200 dark:border-dark-border-primary;
+  }
+  
+  .border-contrast-muted {
+    @apply border-gray-100 dark:border-dark-border-muted;
+  }
+  
+  /* Interactive state utilities */
+  .hover-contrast {
+    @apply hover:bg-gray-50 dark:hover:bg-dark-hover-bg;
+  }
+  
+  .focus-contrast {
+    @apply focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-opacity-50;
+  }
+}
+
+/* Ensure text remains readable during transitions */
+@layer utilities {
+  .transition-colors-safe {
+    transition-property: background-color, border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  /* High contrast focus indicators */
+  .focus-visible-high-contrast {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-dark-bg-primary;
+  }
+  
+  /* Ensure minimum contrast for interactive elements */
+  .interactive-contrast {
+    @apply text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white;
+  }
+}
