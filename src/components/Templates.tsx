@@ -210,6 +210,13 @@ const Templates: React.FC<TemplatesProps> = ({ onNavigate }) => {
   const handleUseTemplate = (template: Template) => {
     // Store the selected template ID for the builder
     localStorage.setItem('selectedTemplateId', template.id);
+    localStorage.setItem('selectedTemplateData', JSON.stringify({
+      id: template.id,
+      name: template.name,
+      color: template.color,
+      style: template.style,
+      hasPhoto: template.hasPhoto
+    }));
     onNavigate('builder');
   };
 
