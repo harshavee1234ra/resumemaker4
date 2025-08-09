@@ -7,17 +7,9 @@ export class PDFGenerator {
       // Ensure the element is visible and properly rendered
       const originalDisplay = resumeElement.style.display;
       const originalVisibility = resumeElement.style.visibility;
-      const originalPosition = resumeElement.style.position;
-      const originalLeft = resumeElement.style.left;
-      const originalTop = resumeElement.style.top;
-      const originalZIndex = resumeElement.style.zIndex;
       
       resumeElement.style.display = 'block';
       resumeElement.style.visibility = 'visible';
-      resumeElement.style.position = 'absolute';
-      resumeElement.style.left = '-9999px';
-      resumeElement.style.top = '0';
-      resumeElement.style.zIndex = '-1';
       
       // Wait for any images to load
       const images = resumeElement.querySelectorAll('img');
@@ -29,15 +21,9 @@ export class PDFGenerator {
         });
       }));
 
-      // Wait for fonts to load
-      if (document.fonts) {
-        await document.fonts.ready;
-      }
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       // Create canvas from HTML element with higher quality settings
       const canvas = await html2canvas(resumeElement, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         allowTaint: false,
         backgroundColor: '#ffffff',
@@ -45,22 +31,12 @@ export class PDFGenerator {
         height: resumeElement.scrollHeight,
         logging: false,
         imageTimeout: 15000,
-        removeContainer: false,
-        letterRendering: true,
-        foreignObjectRendering: true,
-        onclone: (clonedDoc) => {
-          // Ensure fonts are preserved in the cloned document
-          clonedDoc.fonts = document.fonts;
-        }
+        removeContainer: false
       });
 
       // Restore original styles
       resumeElement.style.display = originalDisplay;
       resumeElement.style.visibility = originalVisibility;
-      resumeElement.style.position = originalPosition;
-      resumeElement.style.left = originalLeft;
-      resumeElement.style.top = originalTop;
-      resumeElement.style.zIndex = originalZIndex;
 
       // Calculate dimensions for A4 page
       const imgWidth = 210; // A4 width in mm
@@ -74,14 +50,14 @@ export class PDFGenerator {
 
       // Add first page
       const imgData = canvas.toDataURL('image/png', 1.0);
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'SLOW');
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
 
       // Add additional pages if needed
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'SLOW');
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
 
